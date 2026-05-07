@@ -1,7 +1,9 @@
 import ToDoItem from "./ToDoItem";
 import React from "react";
+import { useAppContext } from "./AppContext";
+const Today = () => {
+  const { tasks, setTasks, layout } = useAppContext();
 
-const Today = ({ tasks, setTasks, layout }) => {
   // 🎨 Styles
 
   const styles = {

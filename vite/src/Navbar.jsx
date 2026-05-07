@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-function Navbar({ layout, setLayout, setIsCollapsed, tasks }) {
+import { useAppContext } from "./AppContext";
+function Navbar() {
+  const { layout, setLayout, setIsCollapsed, tasks } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 

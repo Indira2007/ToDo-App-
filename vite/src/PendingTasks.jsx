@@ -1,5 +1,8 @@
 import ToDoItem from "./ToDoItem";
-const PendingTasks = ({ tasks, setTasks, layout, setLayout }) => {
+import { useAppContext } from "./AppContext";
+const PendingTasks = () => {
+  const { tasks, setTasks, layout, setLayout } = useAppContext();
+
   const pendingTasks = tasks.filter((t) => {
     if (t.deleted) return false;
 

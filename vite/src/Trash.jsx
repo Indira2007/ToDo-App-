@@ -1,7 +1,8 @@
 import React from "react";
 import ToDoItem from "./ToDoItem";
-
-const Trash = ({ tasks, setTasks, layout }) => {
+import { useAppContext } from "./AppContext";
+const Trash = () => {
+  const { tasks, setTasks, layout } = useAppContext();
   const styles = {
     container: {
       padding: "20px",

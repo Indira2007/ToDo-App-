@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import ToDoItem from "./ToDoItem";
+import { useAppContext } from "./AppContext";
+const ToDosList = () => {
+  const { tasks, setTasks, layout } = useAppContext();
 
-const ToDosList = ({ tasks, setTasks, layout }) => {
   const [task, setTask] = useState("");
   const [desc, setDesc] = useState("");
   const [dueDate, setDueDate] = useState("");

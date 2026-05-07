@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
-const Sidebar = ({ isCollapsed }) => {
+import { useAppContext } from "./AppContext";
+const Sidebar = () => {
+  const { isCollapsed } = useAppContext();
   const navigate = useNavigate();
   const location = useLocation();
 
