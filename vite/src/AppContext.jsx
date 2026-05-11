@@ -7,6 +7,7 @@ export const AppProvider = ({ children }) => {
     const data = localStorage.getItem("tasks");
     return data ? JSON.parse(data) : [];
   });
+
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [layout, setLayout] = useState("list");
   useEffect(() => {

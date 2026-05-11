@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "./AppContext";
+
 function Navbar() {
   const { layout, setLayout, setIsCollapsed, tasks } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
@@ -72,6 +73,7 @@ function Navbar() {
           />
           <span>{layout === "list" ? " Grid" : "List"}</span>
         </button>
+        
         <img
           src="https://res.cloudinary.com/dix0tr5gb/image/upload/v1777452813/setting-icon-614x460_jxfejg.png"
           alt="setting-icon"
