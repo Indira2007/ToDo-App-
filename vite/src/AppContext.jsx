@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 const AppContext = createContext();
-const API_URL = "http://localhost:5000/api/Tasks";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api/Tasks";
 
 export const AppProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
