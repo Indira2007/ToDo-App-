@@ -1,7 +1,8 @@
 import ToDoItem from "./ToDoItem";
 import { useAppContext } from "./AppContext";
 const PendingTasks = () => {
-  const { tasks, setTasks, layout, setLayout } = useAppContext();
+  const { tasks, moveTaskToTrash, layout, theme } = useAppContext();
+  const isDark = theme === "dark";
 
   const pendingTasks = tasks.filter((t) => {
     if (t.deleted) return false;
@@ -17,12 +18,12 @@ const PendingTasks = () => {
 
   return (
     <>
-      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+      <h2 style={{ textAlign: "center", marginBottom: "20px" , color: isDark ? "#fff" : "#333"}}>
         ⏳ Pending Tasks
       </h2>
 
       {pendingTasks.length === 0 ? (
-        <p style={{ textAlign: "center", color: "#555" }}>
+        <p style={{ textAlign: "center", color: isDark ? "#ccc" : "#555" }}>
           No pending tasks! 🎉
         </p>
       ) : (
@@ -41,17 +42,18 @@ const PendingTasks = () => {
         >
           {pendingTasks.map((item) => (
             <ToDoItem
-              key={item.id}
+              key={item._id}
               task={item.task}
               desc={item.desc}
               date={item.date}
               Priority={item.priority}
-              onDelete={() => {
-                setTasks((prev) =>
-                  prev.map((t) =>
-                    t.id === item.id ? { ...t, deleted: true } : t,
-                  ),
-                );
+              onDelete={async () => {
+                try {
+                  await moveTaskToTrash(item._id);
+                } catch (err) {
+                  console.error(err);
+                  alert("Failed to move task to trash");
+                }
               }}
             />
           ))}

@@ -2,7 +2,8 @@ import ToDoItem from "./ToDoItem";
 import React from "react";
 import { useAppContext } from "./AppContext";
 const Today = () => {
-  const { tasks, setTasks, layout } = useAppContext();
+  const { tasks, moveTaskToTrash, layout, theme } = useAppContext();
+  const isDark = theme === "dark";
 
   // 🎨 Styles
 
@@ -14,11 +15,11 @@ const Today = () => {
     heading: {
       fontSize: "24px",
       marginBottom: "20px",
-      color: "#333",
+      color: isDark ? "#fff" : "#333",
     },
     empty: {
       textAlign: "center",
-      color: "#777",
+      color: isDark ? "#ccc" : "#777",
       marginTop: "40px",
       fontSize: "16px",
     },
@@ -29,7 +30,7 @@ const Today = () => {
       gap: "15px",
     },
     card: {
-      backgroundColor: "#ffffff",
+      backgroundColor: isDark ? "#444" : "#ffffff",
       padding: "15px",
       borderRadius: "10px",
       boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
@@ -56,12 +57,13 @@ const Today = () => {
   });
 
   // ✅ Delete (move to trash)
-  const deleteTask = (id) => {
-    const updatedTasks = tasks.map((t) =>
-      t.id === id ? { ...t, deleted: true } : t,
-    );
-
-    setTasks(updatedTasks);
+  const deleteTask = async (id) => {
+    try {
+      await moveTaskToTrash(id);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to move task to trash");
+    }
   };
 
   return (
@@ -86,12 +88,12 @@ const Today = () => {
         >
           {todaysTasks.map((item) => (
             <ToDoItem
-              key={item.id}
+              key={item._id}
               task={item.task}
               desc={item.desc}
               date={item.date}
               Priority={item.priority}
-              onDelete={() => deleteTask(item.id)}
+              onDelete={() => deleteTask(item._id)}
             />
           ))}
         </ul>

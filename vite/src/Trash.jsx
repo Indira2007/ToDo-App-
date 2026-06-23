@@ -2,7 +2,8 @@ import React from "react";
 import ToDoItem from "./ToDoItem";
 import { useAppContext } from "./AppContext";
 const Trash = () => {
-  const { tasks, setTasks, layout } = useAppContext();
+  const { tasks, restoreTask, deleteTaskForever, layout, theme } = useAppContext();
+  const isDark = theme === "dark";
   const styles = {
     container: {
       padding: "20px",
@@ -11,11 +12,11 @@ const Trash = () => {
     heading: {
       fontSize: "24px",
       marginBottom: "20px",
-      color: "#333",
+      color: isDark ? "#fff" : "#333",
     },
     empty: {
       fontSize: "16px",
-      color: "#777",
+      color: isDark ? "#ccc" : "#777",
       textAlign: "center",
       marginTop: "40px",
     },
@@ -26,7 +27,7 @@ const Trash = () => {
     },
     restoreBtn: {
       padding: "8px 14px",
-      backgroundColor: "#4CAF50",
+      backgroundColor: isDark ? "#4CAF50" : "#4CAF50",
       border: "none",
       borderRadius: "6px",
       color: "#fff",
@@ -34,7 +35,7 @@ const Trash = () => {
     },
     deleteBtn: {
       padding: "8px 14px",
-      backgroundColor: "#ff4d4f",
+      backgroundColor: isDark ? "#ff4d4f" : "#ff4d4f",
       border: "none",
       borderRadius: "6px",
       color: "#fff",
@@ -42,21 +43,26 @@ const Trash = () => {
     },
   };
 
-  // 🔥 Get deleted tasks
+
   const trashTasks = tasks.filter((t) => t.deleted);
 
   // 🔁 Restore
-  const restoreTask = (id) => {
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.id === id ? { ...t, deleted: false } : t
-      )
-    );
+  const handleRestoreTask = async (id) => {
+    try {
+      await restoreTask(id);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to restore task");
+    }
   };
 
-  // ❌ Delete forever
-  const deleteForever = (id) => {
-    setTasks((prev) => prev.filter((t) => t.id !== id));
+  const handleDeleteForever = async (id) => {
+    try {
+      await deleteTaskForever(id);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete task");
+    }
   };
 
   return (
@@ -80,7 +86,7 @@ const Trash = () => {
           }}
         >
           {trashTasks.map((item) => (
-            <li key={item.id}>
+            <li key={item._id}>
               
               {/* Task Card */}
               <ToDoItem
@@ -95,14 +101,14 @@ const Trash = () => {
               <div style={styles.buttonContainer}>
                 <button
                   style={styles.restoreBtn}
-                  onClick={() => restoreTask(item.id)}
+                  onClick={() => handleRestoreTask(item._id)}
                 >
                   Restore 
                 </button>
 
                 <button
                   style={styles.deleteBtn}
-                  onClick={() => deleteForever(item.id)}
+                  onClick={() => handleDeleteForever(item._id)}
                 >
                   Delete Forever 
                 </button>

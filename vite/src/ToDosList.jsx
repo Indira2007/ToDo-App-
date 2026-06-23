@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ToDoItem from "./ToDoItem";
 import { useAppContext } from "./AppContext";
 const ToDosList = () => {
-  const { tasks, setTasks, layout } = useAppContext();
+  const { tasks, addTask, moveTaskToTrash, layout } = useAppContext();
 
   const [task, setTask] = useState("");
   const [desc, setDesc] = useState("");
@@ -10,7 +10,7 @@ const ToDosList = () => {
   const [priority, setPriority] = useState("Medium");
   const [sortOrder, setSortOrder] = useState("asc");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!task.trim() || !desc.trim()) {
@@ -21,24 +21,30 @@ const ToDosList = () => {
     const newTask = {
       task,
       desc,
-      date: dueDate || new Date().toDateString(),
-      id: Date.now(),
-      priority, // Default priority
+      date: dueDate || new Date().toISOString(),
+      priority,
       deleted: false,
     };
 
-    setTasks([...tasks, newTask]);
+    try {
+      await addTask(newTask);
 
-    setTask("");
-    setDesc("");
-    setDueDate("");
+      setTask("");
+      setDesc("");
+      setDueDate("");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add task");
+    }
   };
 
-  const deleteTask = (id) => {
-    const updatedTasks = tasks.map((t) =>
-      t.id === id ? { ...t, deleted: true } : t,
-    );
-    setTasks(updatedTasks);
+  const deleteTask = async (id) => {
+    try {
+      await moveTaskToTrash(id);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to move task to trash");
+    }
   };
 
   const activeTasks = tasks.filter((t) => !t.deleted);
@@ -199,12 +205,12 @@ const ToDosList = () => {
           ) : (
             sortedTasks.map((item) => (
               <ToDoItem
-                key={item.id}
+                key={item._id}
                 task={item.task}
                 desc={item.desc}
                 date={item.date}
                 Priority={item.priority}
-                onDelete={() => deleteTask(item.id)}
+                onDelete={() => deleteTask(item._id)}
               />
             ))
           )}

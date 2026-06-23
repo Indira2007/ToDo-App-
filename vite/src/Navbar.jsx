@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useAppContext } from "./AppContext";
 
 function Navbar() {
-  const { layout, setLayout, setIsCollapsed, tasks } = useAppContext();
+  const { layout, setLayout, setIsCollapsed, tasks, theme, setTheme } =
+    useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
@@ -12,13 +13,17 @@ function Navbar() {
     setSearchTerm(term);
 
     if (term.trim() === "") {
-      navigate("/");
+      navigate("/AddTask");
+      return;
     }
+
     const foundTask = tasks.find((t) =>
       t.task.toLowerCase().includes(term.toLowerCase()),
     );
+
     if (!foundTask) return;
-    const taskDate = new Date(foundTask.Date);
+
+    const taskDate = new Date(foundTask.date);
     const todayDate = new Date();
 
     todayDate.setHours(0, 0, 0, 0);
@@ -28,8 +33,8 @@ function Navbar() {
       navigate("/Trash");
     } else if (taskDate < todayDate) {
       navigate("/PendingTasks");
-    } else if (taskDate === todayDate) {
-      navigate("/Today");
+    } else if (taskDate.getTime() === todayDate.getTime()) {
+      navigate("/today");
     } else {
       navigate("/AddTask");
     }
@@ -73,7 +78,13 @@ function Navbar() {
           />
           <span>{layout === "list" ? " Grid" : "List"}</span>
         </button>
-        
+        <button
+          style={styles.btn}
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+        >
+          {theme === "dark" ? "☀️" : "🌙"}
+        </button>
+
         <img
           src="https://res.cloudinary.com/dix0tr5gb/image/upload/v1777452813/setting-icon-614x460_jxfejg.png"
           alt="setting-icon"
@@ -115,6 +126,7 @@ const styles = {
   menu: {
     fontSize: "20px",
     cursor: "pointer",
+    background: "transparent"
   },
   layout: {
     height: "24px",
