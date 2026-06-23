@@ -86,35 +86,31 @@ const Trash = () => {
           }}
         >
           {trashTasks.map((item) => (
-            <li key={item._id}>
-              
-              {/* Task Card */}
-              <ToDoItem
-                task={item.task}
-                desc={item.desc}
-                date={item.date}
-                Priority={item.priority}
-                hideDelete={true}
-              />
+            <ToDoItem
+              key={item._id}
+              task={item.task}
+              desc={item.desc}
+              date={item.date}
+              Priority={item.priority}
+              hideDelete={true}
+              actions={
+                <div style={styles.buttonContainer}>
+                  <button
+                    style={styles.restoreBtn}
+                    onClick={() => handleRestoreTask(item._id)}
+                  >
+                    Restore 
+                  </button>
 
-              {/* Actions */}
-              <div style={styles.buttonContainer}>
-                <button
-                  style={styles.restoreBtn}
-                  onClick={() => handleRestoreTask(item._id)}
-                >
-                  Restore 
-                </button>
-
-                <button
-                  style={styles.deleteBtn}
-                  onClick={() => handleDeleteForever(item._id)}
-                >
-                  Delete Forever 
-                </button>
-              </div>
-
-            </li>
+                  <button
+                    style={styles.deleteBtn}
+                    onClick={() => handleDeleteForever(item._id)}
+                  >
+                    Delete Forever 
+                  </button>
+                </div>
+              }
+            />
           ))}
         </ul>
       )}

@@ -23,6 +23,7 @@ function App() {
           <div className="main-content">
             <Routes>
 
+              <Route path="/" element={<ToDosList />} />
               <Route path="/AddTask" element={<ToDosList />} />
               <Route path="/today" element={<Today />} />
               <Route path="/Trash" element={<Trash />} />

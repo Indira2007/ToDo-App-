@@ -1,6 +1,6 @@
 import React from "react";
 
-const ToDoItem = ({ task, desc, date, Priority, onDelete , hideDelete }) => {
+const ToDoItem = ({ task, desc, date, Priority, onDelete , hideDelete, actions }) => {
     const priorityColors = {
     High: "#fa5252",
     Medium: "#f59f00",
@@ -92,10 +92,14 @@ const ToDoItem = ({ task, desc, date, Priority, onDelete , hideDelete }) => {
         </button>
 
         <div className="todo-footer">
-          {!hideDelete && (
-            <button className="delete-btn" onClick={onDelete}>
-              Delete
-            </button>
+          {actions ? (
+            actions
+          ) : (
+            !hideDelete && (
+              <button className="delete-btn" onClick={onDelete}>
+                Delete
+              </button>
+            )
           )}
         </div>
       </li>

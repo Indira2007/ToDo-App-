@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "./AppContext";
+import { Settings, LayoutGrid, List, Sun, Moon } from "lucide-react";
 
 function Navbar() {
   const { layout, setLayout, setIsCollapsed, tasks, theme, setTheme } =
@@ -71,25 +72,17 @@ function Navbar() {
             setLayout((prev) => (prev === "list" ? "grid" : "list"))
           }
         >
-          <img
-            src="https://res.cloudinary.com/dix0tr5gb/image/upload/v1777453825/875076_pflwfv.png"
-            alt="grid-icon"
-            style={styles.layout}
-          />
-          <span>{layout === "list" ? " Grid" : "List"}</span>
+          {layout === "list" ? <LayoutGrid size={20} /> : <List size={20} />}
+          <span>{layout === "list" ? " Grid" : " List"}</span>
         </button>
         <button
           style={styles.btn}
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         >
-          {theme === "dark" ? "☀️" : "🌙"}
+          {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
-        <img
-          src="https://res.cloudinary.com/dix0tr5gb/image/upload/v1777452813/setting-icon-614x460_jxfejg.png"
-          alt="setting-icon"
-          style={styles.icon}
-        />
+        <Settings size={20} style={{ cursor: "pointer" }} />
         <span style={styles.profile}>M</span>
       </div>
     </nav>
