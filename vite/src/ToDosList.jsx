@@ -62,6 +62,8 @@ const ToDosList = () => {
     }
   });
 
+  console.log(tasks);
+  console.log(Array.isArray(tasks));
   return (
     <>
       <style>{`

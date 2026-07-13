@@ -2,7 +2,9 @@ const Task = require("../models/TaskModel");
 
 const getTasks = async (req, res) => {
   try {
-    const tasks = await Task.find();
+    const tasks = await Task.find({
+  user: req.user.id,
+});
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch tasks" });
@@ -18,9 +20,10 @@ const getTodayTasks = async (req, res) => {
     end.setDate(end.getDate() + 1);
 
     const tasks = await Task.find({
-      deleted: false,
-      date: { $gte: start, $lt: end },
-    });
+  user: req.user.id,
+  deleted: false,
+  date: { $gte: start, $lt: end },
+});
 
     res.json(tasks);
   } catch (err) {
@@ -34,9 +37,10 @@ const getPendingTasks = async (req, res) => {
     today.setHours(0, 0, 0, 0);
 
     const tasks = await Task.find({
-      deleted: false,
-      date: { $lt: today },
-    });
+  user: req.user.id,
+  deleted: false,
+  date: { $lt: today },
+});
 
     res.json(tasks);
   } catch (err) {
@@ -46,7 +50,10 @@ const getPendingTasks = async (req, res) => {
 
 const getTrashTasks = async (req, res) => {
   try {
-    const tasks = await Task.find({ deleted: true });
+    const tasks = await Task.find({
+  user: req.user.id,
+  deleted: true,
+});
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch trash tasks" });
@@ -64,7 +71,13 @@ const createTask = async (req, res) => {
         .json({ message: "Task, description, and date are required" });
     }
 
-    const newTask = new Task({ task, desc, date, priority });
+    const newTask = new Task({
+  task,
+  desc,
+  date,
+  priority,
+  user: req.user.id,
+});
     const saved = await newTask.save();
     res.status(201).json(saved);
   } catch (err) {

@@ -1,3 +1,5 @@
+const authMiddleware = require("../middleware/authMiddleware");
+
 const express = require("express");
 const {
   getTasks,
@@ -13,15 +15,15 @@ const {
 
 const router = express.Router();
 
-router.get("/", getTasks);
-router.get("/today", getTodayTasks);
-router.get("/Today", getTodayTasks);
-router.get("/PendingTasks", getPendingTasks);
-router.get("/Trash", getTrashTasks);
-router.post("/AddTask", createTask);
-router.put("/:id", updateTask);
-router.patch("/:id/trash", moveTaskToTrash);
-router.patch("/:id/restore", restoreTask);
-router.delete("/:id", deleteTaskForever);
+router.get("/", authMiddleware, getTasks);
+router.get("/today", authMiddleware, getTodayTasks);
+router.get("/Today", authMiddleware, getTodayTasks);
+router.get("/PendingTasks", authMiddleware, getPendingTasks);
+router.get("/Trash", authMiddleware, getTrashTasks);
+router.post("/AddTask", authMiddleware, createTask);
+router.put("/:id", authMiddleware, updateTask);
+router.patch("/:id/trash", authMiddleware, moveTaskToTrash);
+router.patch("/:id/restore", authMiddleware, restoreTask);
+router.delete("/:id", authMiddleware, deleteTaskForever);
 
 module.exports = router;

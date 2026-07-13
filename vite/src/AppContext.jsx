@@ -1,7 +1,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 const AppContext = createContext();
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api/Tasks";
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api/Tasks";
 
 export const AppProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
@@ -14,13 +15,47 @@ export const AppProvider = ({ children }) => {
     document.body.className = theme;
   }, [theme]);
 
-  useEffect(() => {
-    fetch(API_URL)
-      .then((res) => res.json())
-      .then((data) => setTasks(data))
-      .catch((err) => console.error("Failed to fetch tasks:", err));
-  }, []);
+  // useEffect(() => {
+  //   const fetchTasks = async () => {
+  //     try {
+  //       const res = await fetch(API_URL, {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //       });
 
+  //       const data = await res.json();
+  //       setTasks(data);
+  //     } catch (err) {
+  //       console.error("Failed to fetch tasks:", err);
+  //     }
+  //   };
+
+  //   fetchTasks();
+  // }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    console.log("Token:", token);
+
+    fetch(API_URL, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(async (res) => {
+        console.log("Status:", res.status);
+        const data = await res.json();
+        console.log("Response:", data);
+
+        if (res.ok) {
+          setTasks(data);
+        } else {
+          setTasks([]);
+        }
+      })
+      .catch((err) => console.error(err));
+  }, []);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [layout, setLayout] = useState("list");
 
@@ -29,6 +64,7 @@ export const AppProvider = ({ children }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify(newTask),
     });
@@ -53,7 +89,7 @@ export const AppProvider = ({ children }) => {
 
     const updatedTask = await res.json();
     setTasks((prev) =>
-      prev.map((task) => (task._id === id ? updatedTask : task))
+      prev.map((task) => (task._id === id ? updatedTask : task)),
     );
   };
 
@@ -68,7 +104,7 @@ export const AppProvider = ({ children }) => {
 
     const updatedTask = await res.json();
     setTasks((prev) =>
-      prev.map((task) => (task._id === id ? updatedTask : task))
+      prev.map((task) => (task._id === id ? updatedTask : task)),
     );
   };
 
