@@ -1,6 +1,12 @@
 import "./App.css";
 import React from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import ToDosList from "./ToDosList";
@@ -16,6 +22,7 @@ function AppContent() {
 
   const isAuthPage =
     location.pathname.toLowerCase() === "/login" ||
+    location.pathname.toLowerCase() === "/" ||
     location.pathname.toLowerCase() === "/register";
   return (
     <>
@@ -27,8 +34,8 @@ function AppContent() {
         <div className={isAuthPage ? "" : "main-content"}>
           <Routes>
             <Route path="/register" element={<Register />} />
+            <Route path="/" element={<Navigate to="/register" replace />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={<ToDosList />} />
             <Route path="/AddTask" element={<ToDosList />} />
             <Route path="/today" element={<Today />} />
             <Route path="/Trash" element={<Trash />} />

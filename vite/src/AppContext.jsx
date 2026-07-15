@@ -15,24 +15,6 @@ export const AppProvider = ({ children }) => {
     document.body.className = theme;
   }, [theme]);
 
-  // useEffect(() => {
-  //   const fetchTasks = async () => {
-  //     try {
-  //       const res = await fetch(API_URL, {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       });
-
-  //       const data = await res.json();
-  //       setTasks(data);
-  //     } catch (err) {
-  //       console.error("Failed to fetch tasks:", err);
-  //     }
-  //   };
-
-  //   fetchTasks();
-  // }, []);
   useEffect(() => {
     const token = localStorage.getItem("token");
 
