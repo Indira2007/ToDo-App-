@@ -4,7 +4,7 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-
+  console.log(import.meta.env.VITE_API_URL);
   const onHandleSubmit = async (event) => {
     event.preventDefault();
 
